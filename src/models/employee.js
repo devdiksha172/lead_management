@@ -1,4 +1,5 @@
 "use strict";
+const bcrypt = require("bcryptjs");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Employee extends Model {
@@ -10,21 +11,31 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 		}
+		validPassword(password) {
+			return bcrypt.compareSync(password, this.password);
+		}
 	}
-	User.init(
+	Employee.init(
 		{
-			firstName: DataTypes.STRING,
-			lastName: DataTypes.STRING,
+			firstname: DataTypes.STRING,
+			lastname: DataTypes.STRING,
 			email: DataTypes.STRING,
+			mobile: DataTypes.STRING,
+			password: DataTypes.STRING,
 		},
 		{
 			sequelize,
 			modelName: "Employee",
 			tableName: "employees",
-			timestamps: true,
+			hooks: {
+				beforeCreate: async (employee) => {
+					let salt = await bcrypt.genSalt(10);
+					employee.password = await bcrypt.hash(employee.password, salt);
+				},
+			},
 			paranoid: true, // adds deletedAt for soft delete
 			underscored: true, // uses snake_case column names like created_at
 		}
 	);
-	return User;
+	return Employee;
 };

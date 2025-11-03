@@ -5,17 +5,21 @@ module.exports = (sequelize, DataTypes) => {
 	class State extends Model {
 		static associate(models) {
 			State.belongsTo(models.Country, {
-				foreignKey: "country_id",
+				foreignKey: "countryId",
 				as: "country",
 				onDelete: "CASCADE",
 				onUpdate: "CASCADE",
+			});
+			State.hasMany(models.Unit, {
+				foreignKey: "stateId",
+				as: "units",
 			});
 		}
 	}
 
 	State.init(
 		{
-			country_id: {
+			countryId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -37,9 +41,6 @@ module.exports = (sequelize, DataTypes) => {
 			sequelize,
 			modelName: "State",
 			tableName: "states",
-			underscored: true, // uses snake_case columns (created_at, updated_at)
-			timestamps: true, // adds created_at and updated_at
-			paranoid: true, // adds deleted_at (for soft deletes)
 		}
 	);
 

@@ -9,7 +9,15 @@ const sequelize = new Sequelize(
 		host: process.env.DB_HOST || "127.0.0.1",
 		port: process.env.DB_PORT || 3306,
 		dialect: process.env.DB_DIALECT || "mysql",
-		logging: false, //console.log, // set to true if you want to see SQL queries in console
+		define: {
+			underscored: true, // convert camelCase -> snake_case
+			timestamps: true, // auto add created_at, updated_at
+			paranoid: true, // enable deleted_at (soft delete)
+			createdAt: "created_at",
+			updatedAt: "updated_at",
+			deletedAt: "deleted_at",
+		},
+		logging: false,
 	}
 );
 
