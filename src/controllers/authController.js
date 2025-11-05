@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
+const sendMail = require("../utils/mailer");
+
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 async function register(req, res) {
@@ -28,6 +30,12 @@ async function register(req, res) {
 			mobile,
 			password,
 		});
+
+		// sendMail(
+		// 	email,
+		// 	"Welcome to MyApp 🎉",
+		// 	`<h2>Hello ${firstname},</h2><p>Welcome to MyApp! Your registration is successful.</p>`
+		// );
 
 		res.status(201).json({
 			message: "Employee registration done successfully",
