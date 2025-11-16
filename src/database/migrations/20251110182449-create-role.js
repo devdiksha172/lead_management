@@ -2,26 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("employee_branches", {
+		await queryInterface.createTable("Roles", {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			branch_id: {
+			name: {
 				allowNull: false,
-				type: Sequelize.INTEGER,
+				type: Sequelize.STRING,
 			},
-			employee_id: {
+			slug: {
 				allowNull: false,
-				type: Sequelize.INTEGER,
-				references: { model: "employees", key: "id" },
-				onDelete: "CASCADE",
+				type: Sequelize.STRING,
 			},
 			is_active: {
 				allowNull: false,
 				type: Sequelize.BOOLEAN,
+				defaultValue: true,
+			},
+			created_by: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: { model: "employees", key: "id" },
 			},
 			created_at: {
 				allowNull: false,
@@ -34,13 +38,12 @@ module.exports = {
 				defaultValue: Sequelize.fn("NOW"),
 			},
 			deleted_at: {
-				allowNull: false,
+				allowNull: true,
 				type: Sequelize.DATE,
-				defaultValue: Sequelize.fn("NOW"),
 			},
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("employee_branches");
+		await queryInterface.dropTable("roles");
 	},
 };

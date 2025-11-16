@@ -47,7 +47,6 @@ async function register(req, res) {
 				mobile: employee.mobile,
 			},
 		});
-		return res.status(400).json({ message: "Employee Created successfully" });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
